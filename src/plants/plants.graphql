@@ -1,0 +1,33 @@
+type Query {
+  plants: [Plant]
+  plant(id: ID!): Plant
+}
+
+type Mutation {
+  createPlant(createPlantInput: CreatePlantInput): Plant
+}
+
+type Subscription {
+  planCreated: Plant
+}
+
+type Owner {
+  id: Int!
+  name: String!
+  age: Int
+  plants: [Plant!]
+}
+
+type Plant {
+  id: Int
+  name: String
+  age: Int
+  owner: Owner
+}
+"""
+Test comment
+"""
+input CreatePlantInput {
+  name: String
+  age: Int
+}
