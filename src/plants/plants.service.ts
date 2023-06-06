@@ -1,23 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { Cat } from '../graphql.schema';
+import { Plant } from '../graphql.schema';
 
 @Injectable()
 export class PlantsService {
-  private readonly cats: Array<Cat & { ownerId?: number }> = [
-    { id: 1, name: 'Cat', age: 5, ownerId: 1 },
+  private readonly plants: Array<Plant & { ownerId?: number }> = [
+    { id: 1, name: 'Plant', age: 5, ownerId: 1 },
   ];
 
-  create(cat: Cat): Cat {
-    cat.id = this.cats.length + 1;
-    this.cats.push(cat);
-    return cat;
+  create(plant: Plant): Plant {
+    plant.id = this.plants.length + 1;
+    this.plants.push(plant);
+    return plant;
   }
 
-  findAll(): Cat[] {
-    return this.cats;
+  findAll(): Plant[] {
+    return this.plants;
   }
 
-  findOneById(id: number): Cat {
-    return this.cats.find(cat => cat.id === id);
+  findOneById(id: number): Plant | undefined {
+    return this.plants.find((plant) => plant.id === id);
   }
 }

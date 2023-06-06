@@ -8,7 +8,7 @@ type Mutation {
 }
 
 type Subscription {
-  planCreated: Plant
+  plantCreated: Plant
 }
 
 type Owner {
@@ -24,9 +24,7 @@ type Plant {
   age: Int
   owner: Owner
 }
-"""
-Test comment
-"""
+
 input CreatePlantInput {
   name: String
   age: Int

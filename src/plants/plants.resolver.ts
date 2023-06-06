@@ -1,38 +1,37 @@
-import { ParseIntPipe, UseGuards } from '@nestjs/common';
+import { ParseIntPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
-import { PlantsGuard } from './plants.guard';
 import { PlantsService } from './plants.service';
 import { CreatePlantDto } from './dto/create-plant.dto';
 import { PubSub } from 'graphql-subscriptions';
+import { Plant } from '../graphql.schema';
 
 const pubSub = new PubSub();
 @Resolver('Plant')
 export class PlantsResolver {
-  constructor(private readonly catsService: PlantsService) {}
+  constructor(private readonly plantsService: PlantsService) {}
 
   @Query('plants')
-  @UseGuards(PlantsGuard)
   async getCats() {
-    return this.catsService.findAll();
+    return this.plantsService.findAll();
   }
 
   @Query('plant')
   async findOneById(
     @Args('id', ParseIntPipe)
     id: number,
-  ): Promise<Plant> {
-    return this.catsService.findOneById(id);
+  ): Promise<Plant | undefined> {
+    return this.plantsService.findOneById(id);
   }
 
   @Mutation('createPlant')
   async create(@Args('createPlantInput') args: CreatePlantDto): Promise<Plant> {
-    const createdCat = await this.catsService.create(args);
-    pubSub.publish('catCreated', { catCreated: createdCat });
-    return createdCat;
+    const createdPlant = await this.plantsService.create(args);
+    pubSub.publish('plantCreated', { plantCreated: createdPlant });
+    return createdPlant;
   }
 
-  @Subscription('catCreated')
-  catCreated() {
-    return pubSub.asyncIterator('catCreated');
+  @Subscription('plantCreated')
+  plantCreated() {
+    return pubSub.asyncIterator('plantCreated');
   }
 }
