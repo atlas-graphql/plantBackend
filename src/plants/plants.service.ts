@@ -1,23 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { Plant } from '../graphql.schema';
+import { CreatePlantInput } from './inputs/create-plant.input';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { PlantsEntity } from './entities/plants.entity';
 
 @Injectable()
 export class PlantsService {
-  private readonly plants: Array<Plant & { ownerId?: number }> = [
-    { id: 1, name: 'Plant', age: 5, ownerId: 1 },
-  ];
+  constructor(
+    @InjectRepository(PlantsEntity)
+    private readonly plantRepository: Repository<PlantsEntity>,
+  ) {}
 
-  create(plant: Plant): Plant {
-    plant.id = this.plants.length + 1;
-    this.plants.push(plant);
-    return plant;
+  async create(newPlantData: CreatePlantInput): Promise<PlantsEntity> {
+    const newPlant = await this.plantRepository.create(newPlantData);
+    return this.plantRepository.save(newPlant);
   }
 
-  findAll(): Plant[] {
-    return this.plants;
+  async findAll(): Promise<PlantsEntity[]> {
+    return this.plantRepository.find();
   }
 
-  findOneById(id: number): Plant | undefined {
-    return this.plants.find((plant) => plant.id === id);
+  async findOneById(id: string): Promise<PlantsEntity | null> {
+    return this.plantRepository.findOne({
+      where: { id },
+    });
   }
 }

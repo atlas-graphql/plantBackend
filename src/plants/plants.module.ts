@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { OwnersModule } from '../owners/owners.module';
-import { PlantsResolver } from './plants.resolver';
 import { PlantsService } from './plants.service';
-import { PlantOwnerResolver } from './plant-owner.resolver';
+import { PlantsResolver } from './resolvers/plants.resolver';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { PlantsEntity } from './entities/plants.entity';
 
 @Module({
-  imports: [OwnersModule],
-  providers: [PlantsService, PlantsResolver, PlantOwnerResolver],
+  imports: [TypeOrmModule.forFeature([PlantsEntity])],
+  providers: [PlantsService, PlantsResolver],
 })
 export class PlantsModule {}
