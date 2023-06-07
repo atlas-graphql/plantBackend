@@ -21,13 +21,9 @@ export class PlantsEntity {
   })
   createdAt: Date;
 
-  @CreateDateColumn({
-    type: 'timestamp with time zone',
-  })
+  @Column({ type: 'timestamptz', nullable: true })
   boughtAt?: Date;
 
-  @CreateDateColumn({
-    type: 'timestamp with time zone',
-  })
+  @Column({ type: 'timestamptz', nullable: true })
   deceasedAt?: Date;
 }

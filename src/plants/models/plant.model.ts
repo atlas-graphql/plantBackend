@@ -14,9 +14,9 @@ export class Plant {
   @Field(() => Date)
   createdAt: Date;
 
-  @Field(() => Date)
+  @Field({ nullable: true })
   boughtAt?: Date;
 
-  @Field(() => Date)
+  @Field({ nullable: true })
   deceasedAt?: Date;
 }

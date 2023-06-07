@@ -12,6 +12,11 @@ export class CreatePlantInput {
   @Length(30, 255)
   picture?: string;
 
-  @Field()
-  boughtAt: Date;
+  @Field({ nullable: true })
+  @IsOptional()
+  boughtAt?: Date;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  deceasedAt?: Date;
 }

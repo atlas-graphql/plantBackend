@@ -11,16 +11,16 @@ export class PlantsService {
     private readonly plantRepository: Repository<PlantsEntity>,
   ) {}
 
-  async create(newPlantData: CreatePlantInput): Promise<PlantsEntity> {
-    const newPlant = await this.plantRepository.create(newPlantData);
+  create(newPlantData: CreatePlantInput): Promise<PlantsEntity> {
+    const newPlant = this.plantRepository.create(newPlantData);
     return this.plantRepository.save(newPlant);
   }
 
-  async findAll(): Promise<PlantsEntity[]> {
+  findAll(): Promise<PlantsEntity[]> {
     return this.plantRepository.find();
   }
 
-  async findOneById(id: string): Promise<PlantsEntity | null> {
+  findOneById(id: string): Promise<PlantsEntity | null> {
     return this.plantRepository.findOne({
       where: { id },
     });
