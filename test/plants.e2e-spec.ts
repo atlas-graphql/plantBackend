@@ -134,10 +134,45 @@ describe('PlantsResolver (e2e)', () => {
       const id = v4();
       const newPlant: Plant = {
         id,
-        name: 'Plant 3',
+        name: 'Original plant',
         createdAt,
       };
-      jest.spyOn(plantsService, 'update').mockResolvedValue(newPlant);
+
+      jest.spyOn(plantsService, 'create').mockResolvedValue(newPlant);
+
+      const createResponse = await request(app.getHttpServer())
+        .post(graphqlEndPoint)
+        .send({
+          query: `
+            mutation {
+              createPlant(createPlantInput: {
+                name: "Plant 3",
+              }) {
+                id
+                name
+                createdAt
+              }
+            }
+          `,
+        })
+        .expect(200);
+
+      expect(createResponse.body.data.createPlant).toEqual({
+        id,
+        name: 'Original plant',
+        createdAt: createdAtString,
+      });
+
+      jest
+        .spyOn(plantsService, 'update')
+        .mockImplementation((id, updatePlantInput) => {
+          const updatedPlant: Plant = {
+            id,
+            name: updatePlantInput.name,
+            createdAt,
+          };
+          return Promise.resolve(updatedPlant);
+        });
 
       const response = await request(app.getHttpServer())
         .post(graphqlEndPoint)
@@ -146,7 +181,7 @@ describe('PlantsResolver (e2e)', () => {
             mutation {
               updatePlant(
                 id: "${id}",
-                updatePlantInput: { name: "New name" }
+                updatePlantInput: { name: "New plant name" }
               ) {
                   id
                   name
@@ -159,7 +194,7 @@ describe('PlantsResolver (e2e)', () => {
 
       expect(response.body.data.updatePlant).toEqual({
         id,
-        name: 'New name',
+        name: 'New plant name',
         createdAt: createdAtString,
       });
     });
