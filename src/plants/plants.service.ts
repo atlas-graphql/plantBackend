@@ -25,4 +25,39 @@ export class PlantsService {
       where: { id },
     });
   }
+
+  update(
+    id: string,
+    newPlantData: CreatePlantInput,
+  ): Promise<PlantsEntity | null> {
+    return this.plantRepository
+      .findOneByOrFail({
+        id,
+      })
+      .then((plant) => {
+        const updatedPlant = this.plantRepository.create({
+          ...plant,
+          ...newPlantData,
+        });
+        return this.plantRepository.save(updatedPlant);
+      })
+      .catch(() => null);
+  }
+
+  async delete(id: string): Promise<boolean> {
+    try {
+      const plant = await this.plantRepository.findOne({
+        where: { id },
+      });
+      if (plant) {
+        await this.plantRepository.remove(plant);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
 }

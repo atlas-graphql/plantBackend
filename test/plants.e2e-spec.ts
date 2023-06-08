@@ -128,4 +128,40 @@ describe('PlantsResolver (e2e)', () => {
       });
     });
   });
+
+  describe('updatePlant', () => {
+    it('should update a plant', async () => {
+      const id = v4();
+      const newPlant: Plant = {
+        id,
+        name: 'Plant 3',
+        createdAt,
+      };
+      jest.spyOn(plantsService, 'update').mockResolvedValue(newPlant);
+
+      const response = await request(app.getHttpServer())
+        .post(graphqlEndPoint)
+        .send({
+          query: `
+            mutation {
+              updatePlant(
+                id: "${id}",
+                updatePlantInput: { name: "New name" }
+              ) {
+                  id
+                  name
+                  createdAt
+                }
+              }
+          `,
+        })
+        .expect(200);
+
+      expect(response.body.data.updatePlant).toEqual({
+        id,
+        name: 'New name',
+        createdAt: createdAtString,
+      });
+    });
+  });
 });

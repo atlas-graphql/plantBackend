@@ -18,6 +18,8 @@ scalar DateTime
 
 type Mutation {
   createPlant(createPlantInput: CreatePlantInput!): Plant!
+  deletePlant(id: String!): Boolean!
+  updatePlant(id: String!, updatePlantInput: CreatePlantInput!): Plant!
 }
 
 """A plant """
@@ -33,8 +35,4 @@ type Plant {
 type Query {
   getPlant(id: String!): Plant
   getPlants: [Plant!]!
-}
-
-type Subscription {
-  plantCreated: Plant!
 }

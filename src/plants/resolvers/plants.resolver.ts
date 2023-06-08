@@ -1,17 +1,15 @@
 import { ParseUUIDPipe } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { PlantsService } from '../plants.service';
 import { CreatePlantInput } from '../inputs/create-plant.input';
-import { PubSub } from 'graphql-subscriptions';
 import { Plant } from '../models/plant.model';
 
-const pubSub = new PubSub();
 @Resolver(() => Plant)
 export class PlantsResolver {
   constructor(private readonly plantsService: PlantsService) {}
 
   @Query(() => [Plant], { name: 'getPlants' })
-  async getPlants() {
+  getPlants() {
     return this.plantsService.findAll();
   }
 
@@ -23,17 +21,26 @@ export class PlantsResolver {
     return this.plantsService.findOneById(id);
   }
 
+  @Mutation(() => Boolean, { name: 'deletePlant' })
+  async delete(
+    @Args('id', ParseUUIDPipe)
+    id: string,
+  ): Promise<boolean> {
+    return this.plantsService.delete(id);
+  }
+
+  @Mutation(() => Plant, { name: 'updatePlant' })
+  async update(
+    @Args('id', ParseUUIDPipe) id: string,
+    @Args('updatePlantInput') args: CreatePlantInput,
+  ): Promise<Plant | null> {
+    return await this.plantsService.update(id, args);
+  }
+
   @Mutation(() => Plant, { name: 'createPlant' })
   async create(
     @Args('createPlantInput') args: CreatePlantInput,
   ): Promise<Plant> {
-    const createdPlant = await this.plantsService.create(args);
-    await pubSub.publish('plantCreated', { plantCreated: createdPlant });
-    return createdPlant;
-  }
-
-  @Subscription(() => Plant, { name: 'plantCreated' })
-  plantCreated() {
-    return pubSub.asyncIterator('plantCreated');
+    return await this.plantsService.create(args);
   }
 }
