@@ -15,7 +15,7 @@ export class PlantsResolver {
     return this.plantsService.findAll();
   }
 
-  @Query(() => Plant, { name: 'getPlant' })
+  @Query(() => Plant, { name: 'getPlant', nullable: true })
   async findOneById(
     @Args('id', ParseUUIDPipe)
     id: string,

@@ -17,6 +17,7 @@ specifiers:
   '@types/jest': 29.5.1
   '@types/node': 18.16.12
   '@types/supertest': ^2.0.11
+  '@types/uuid': ^9.0.1
   '@typescript-eslint/eslint-plugin': ^5.0.0
   '@typescript-eslint/parser': ^5.0.0
   class-transformer: 0.5.1
@@ -41,6 +42,7 @@ specifiers:
   tsconfig-paths: 4.2.0
   typeorm: ^0.3.16
   typescript: ^5.0.0
+  uuid: ^9.0.0
 
 dependencies:
   '@apollo/server': 4.7.2_graphql@16.6.0
@@ -61,6 +63,7 @@ dependencies:
   rimraf: 4.4.1
   rxjs: 7.8.1
   typeorm: 0.3.16_pg@8.11.0+ts-node@10.9.1
+  uuid: 9.0.0
 
 devDependencies:
   '@nestjs/cli': 9.5.0
@@ -70,6 +73,7 @@ devDependencies:
   '@types/jest': 29.5.1
   '@types/node': 18.16.12
   '@types/supertest': 2.0.12
+  '@types/uuid': 9.0.1
   '@typescript-eslint/eslint-plugin': 5.59.9_3cembfv4vokiyn6g4ljynjc5d4
   '@typescript-eslint/parser': 5.59.9_tizxnkcvjrb4cldxgwq5h3lj5u
   eslint: 8.42.0
@@ -1711,6 +1715,10 @@ packages:
     resolution: {integrity: sha512-X3HPWTwXRerBZS7Mo1k6vMVR1Z6zmJcDVn5O/31whe0tnjE4te6ZJSJGq1RiqHPjzPdMTfjCFogDJmwng9xHaQ==}
     dependencies:
       '@types/superagent': 4.1.18
+    dev: true
+
+  /@types/uuid/9.0.1:
+    resolution: {integrity: sha512-rFT3ak0/2trgvp4yYZo5iKFEPsET7vKydKF+VRCxlQ9bpheehyAJH89dAkaLEq/j/RZXJIqcgsmPJKUP1Z28HA==}
     dev: true
 
   /@types/validator/13.7.17:

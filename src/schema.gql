@@ -31,7 +31,7 @@ type Plant {
 }
 
 type Query {
-  getPlant(id: String!): Plant!
+  getPlant(id: String!): Plant
   getPlants: [Plant!]!
 }
 

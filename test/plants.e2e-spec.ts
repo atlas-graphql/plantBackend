@@ -1,32 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as request from 'supertest';
 import { INestApplication } from '@nestjs/common';
-import { Plant } from "../src/plants/models/plant.model";
-import { AppModule } from "../src/app.module";
+import * as request from 'supertest';
+import { PlantsService } from '../src/plants/plants.service';
+import { AppModule } from '../src/app.module';
+import { Plant } from '../src/plants/models/plant.model';
+import { v4 } from 'uuid';
 
-const todayDate = new Date();
-
-const plants: Plant[] = [
-  {
-    id: '1',
-    name: 'Ventus',
-    createdAt: todayDate,
-    boughtAt: todayDate,
-    deceasedAt: todayDate,
-  },
-  {
-    id: '2',
-    name: 'Maria',
-    createdAt: todayDate,
-    boughtAt: todayDate,
-    deceasedAt: todayDate,
-  },
-];
-
-const gql = '/graphql';
-
-describe('GraphQL AppResolver (e2e) {Supertest}', () => {
+describe('PlantsResolver (e2e)', () => {
   let app: INestApplication;
+  let plantsService: PlantsService;
+  const createdAt = new Date('2023-01-01');
+  const createdAtString = createdAt.toISOString();
+  const graphqlEndPoint = '/graphql';
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -35,82 +20,111 @@ describe('GraphQL AppResolver (e2e) {Supertest}', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
+
+    plantsService = moduleFixture.get<PlantsService>(PlantsService);
   });
 
   afterAll(async () => {
     await app.close();
   });
 
-  describe("Query of Plant", () => {
-    const query = '{getPlants {id name createdAt boughtAt deceasedAt}}';
-    describe('plants', () => {
-      it('should get the plants array', () => {
-        return request(app.getHttpServer())
-          .post(gql)
-          .send({ query })
-          .expect(200)
-          .expect((res) => {
-            expect(res.body.data.getCats).toEqual(plants);
-          });
-      });
-      describe('one plant', () => {
-        const query = '{getPlant(plantId:{id:"2"}){id name createdAt boughtAt deceasedAt}}';
-        it('should get a single plant', () => {
-          return request(app.getHttpServer())
-            .post(gql)
-            .send({ query })
-            .expect(200)
-            .expect((res) => {
-              expect(res.body.data.getPlant).toEqual({
-                id: '2',
-                name: 'Maria',
-                createdAt: todayDate,
-                boughtAt: todayDate,
-                deceasedAt: todayDate,
-              },);
-            });
-        });
-        it('should get an error for bad id', () => {
-          const query = '{getPlant(plantId:{id:"500"}){id name createdAt boughtAt deceasedAt}}';
-          return request(app.getHttpServer())
-            .post(gql)
-            .send({ query })
-            .expect(200)
-            .expect((res) => {
-              expect(res.body.data).toBe(null);
-              expect(res.body.errors[0].message).toBe(
-                'No cat with id 500 found',
-              );
-            });
-        });
+  describe('getPlants', () => {
+    it('should return an array of plants', async () => {
+      const plants: Plant[] = [
+        { id: '1', name: 'Plant 1', createdAt },
+        { id: '2', name: 'Plant 2', createdAt },
+      ];
+
+      jest.spyOn(plantsService, 'findAll').mockResolvedValue(plants);
+
+      const response = await request(app.getHttpServer())
+        .post(graphqlEndPoint)
+        .send({
+          query: `
+            {
+              getPlants {
+                  id
+                  name
+                  createdAt
+              }
+            }
+          `,
+        })
+        .expect(200);
+
+      expect(response.body.data.getPlants).toEqual([
+        { id: '1', name: 'Plant 1', createdAt: createdAtString },
+        { id: '2', name: 'Plant 2', createdAt: createdAtString },
+      ]);
+    });
+  });
+
+  describe('getPlant', () => {
+    it('should return a plant by id', async () => {
+      const id = v4();
+      const plant: Plant = {
+        id,
+        name: 'Plant 1',
+        createdAt,
+      };
+
+      jest.spyOn(plantsService, 'findOneById').mockResolvedValue(plant);
+
+      const response = await request(app.getHttpServer())
+        .post(graphqlEndPoint)
+        .send({
+          query: `
+            { 
+              getPlant(id: "${id}") {
+                id
+                name
+                createdAt
+              }  
+            }
+          `,
+        })
+        .expect(200);
+
+      expect(response.body.data.getPlant).toEqual({
+        id,
+        name: 'Plant 1',
+        createdAt: createdAtString,
       });
     });
   });
 
-  describe("Mutation of Plant", () => {
-    it('should create a new Plant and have it added to the array', () => {
-      const query = `
-        mutation createPlant({name: "Planten", picture: "pic"}: CreatePlantInput!) {
-            createPlant(createPlantInput: $createPlantInput) {
-              id
-              name
+  describe('createPlant', () => {
+    it('should create a new plant', async () => {
+      const id = v4();
+      const newPlant: Plant = {
+        id,
+        name: 'Plant 3',
+        createdAt,
+      };
+      jest.spyOn(plantsService, 'create').mockResolvedValue(newPlant);
+
+      const response = await request(app.getHttpServer())
+        .post(graphqlEndPoint)
+        .send({
+          query: `
+            mutation {
+              createPlant(createPlantInput: {
+                name: "Plant 3",
+              }) {
+                id
+                name
+                createdAt
+              }
             }
-        }`;
-      return (
-        request(app.getHttpServer())
-          .post(gql)
-          .send({
-            query
-          })
-          .expect(200)
-          .expect((res) => {
-            expect(res.body.data.createPlant).toEqual({
-              id: '3',
-              name: 'Planten',
-              picture: 'pic',
-            });
-          })
-      );
+          `,
+        })
+        .expect(200);
+
+      expect(response.body.data.createPlant).toEqual({
+        id,
+        name: 'Plant 3',
+        createdAt: createdAtString,
+      });
     });
-  })
+  });
 });
