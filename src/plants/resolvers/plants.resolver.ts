@@ -2,7 +2,7 @@ import { ParseUUIDPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { PlantsService } from '../plants.service';
 import { CreatePlantInput } from '../inputs/create-plant.input';
-import { Plant } from '../models/plant.model';
+import { Plant } from '../entities/plant.entity';
 
 @Resolver(() => Plant)
 export class PlantsResolver {
@@ -25,7 +25,7 @@ export class PlantsResolver {
   async delete(
     @Args('id', ParseUUIDPipe)
     id: string,
-  ): Promise<boolean> {
+  ): Promise<Plant> {
     return this.plantsService.delete(id);
   }
 

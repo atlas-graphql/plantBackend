@@ -22,7 +22,6 @@ type Mutation {
   updatePlant(id: String!, updatePlantInput: CreatePlantInput!): Plant!
 }
 
-"""A plant """
 type Plant {
   boughtAt: DateTime
   createdAt: DateTime!

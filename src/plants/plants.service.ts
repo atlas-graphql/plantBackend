@@ -2,34 +2,31 @@ import { Injectable } from '@nestjs/common';
 import { CreatePlantInput } from './inputs/create-plant.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PlantsEntity } from './entities/plants.entity';
+import { Plant } from './entities/plant.entity';
 
 @Injectable()
 export class PlantsService {
   constructor(
-    @InjectRepository(PlantsEntity)
-    private readonly plantRepository: Repository<PlantsEntity>,
+    @InjectRepository(Plant)
+    private readonly plantRepository: Repository<Plant>,
   ) {}
 
-  create(newPlantData: CreatePlantInput): Promise<PlantsEntity> {
+  create(newPlantData: CreatePlantInput): Promise<Plant> {
     const newPlant = this.plantRepository.create(newPlantData);
     return this.plantRepository.save(newPlant);
   }
 
-  findAll(): Promise<PlantsEntity[]> {
+  findAll(): Promise<Plant[]> {
     return this.plantRepository.find();
   }
 
-  findOneById(id: string): Promise<PlantsEntity | null> {
+  findOneById(id: string): Promise<Plant | null> {
     return this.plantRepository.findOne({
       where: { id },
     });
   }
 
-  update(
-    id: string,
-    newPlantData: CreatePlantInput,
-  ): Promise<PlantsEntity | null> {
+  update(id: string, newPlantData: CreatePlantInput): Promise<Plant | null> {
     return this.plantRepository
       .findOneByOrFail({
         id,
@@ -44,20 +41,11 @@ export class PlantsService {
       .catch(() => null);
   }
 
-  async delete(id: string): Promise<boolean> {
-    try {
-      const plant = await this.plantRepository.findOne({
-        where: { id },
-      });
-      if (plant) {
-        await this.plantRepository.remove(plant);
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
+  async delete(id: string) {
+    const plant = await this.plantRepository.findOneByOrFail({
+      id,
+    });
+
+    return await this.plantRepository.remove(plant);
   }
 }

@@ -3,8 +3,8 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { PlantsService } from '../src/plants/plants.service';
 import { AppModule } from '../src/app.module';
-import { Plant } from '../src/plants/models/plant.model';
 import { v4 } from 'uuid';
+import { Plant } from '../src/plants/entities/plant.entity';
 
 describe('PlantsResolver (e2e)', () => {
   let app: INestApplication;
