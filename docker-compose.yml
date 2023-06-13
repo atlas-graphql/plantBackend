@@ -1,17 +1,31 @@
 
 version: '3.8'
 services:
-  postgres:
-    image: postgres:latest
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
+      POSTGRES_HOST: host.docker.internal
+      POSTGRES_PORT: '5432'
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
-    # we map our container internal port 5432, to our host port 5432
     ports:
-      - "5432:5432"
+      - '3000:3000'
+    depends_on:
+      - db
     volumes:
-      # we mount our psql data in a volume for persistance
-      - db:/var/lib/postgresql/data
-volumes:
+      - ./src:/app/src
   db:
+    image: postgres:latest
+    container_name: db
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - ~/dbdata:/var/lib/postgresql/data
