@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "gen:schema": "ts-node src/generator/generate-typings.ts",
     "seed": "ts-node src/generator/seed.ts",
-    "docker:setup" : "docker compose up"
+    "setup" : "docker compose up"
   },
   "dependencies": {
     "@apollo/server": "^4.7.2",
