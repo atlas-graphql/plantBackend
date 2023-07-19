@@ -34,4 +34,6 @@ type Plant {
 type Query {
   getPlant(id: String!): Plant
   getPlants: [Plant!]!
+  getPlantsTotal: Float!
+  getUnboughtPlantsCount: Float!
 }

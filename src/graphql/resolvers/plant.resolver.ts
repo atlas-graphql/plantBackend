@@ -1,16 +1,26 @@
 import { ParseUUIDPipe } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { PlantsService } from '../plants.service';
-import { CreatePlantInput } from '../inputs/create-plant.input';
-import { Plant } from '../entities/plant.entity';
+import { PlantService } from '../../services/plant.service';
+import { CreatePlantInput } from '../input/create-plant.input';
+import { Plant } from '../../entities/plant.entity';
 
 @Resolver(() => Plant)
-export class PlantsResolver {
-  constructor(private readonly plantsService: PlantsService) {}
+export class PlantResolver {
+  constructor(private readonly plantsService: PlantService) {}
 
   @Query(() => [Plant], { name: 'getPlants' })
   getPlants() {
     return this.plantsService.findAll();
+  }
+
+  @Query(() => Number, { name: 'getPlantsTotal' })
+  getTotalPlants() {
+    return this.plantsService.findAllTotal();
+  }
+
+  @Query(() => Number, { name: 'getUnboughtPlantsCount' })
+  getUnboughtPlantsCount() {
+    return this.plantsService.findAllUnboughtPlants();
   }
 
   @Query(() => Plant, { name: 'getPlant', nullable: true })

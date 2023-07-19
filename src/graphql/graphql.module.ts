@@ -5,7 +5,7 @@ import { join } from 'path';
 import { upperDirectiveTransformer } from '../common/directives/upper-case.directive';
 import { GraphQLDirective } from 'graphql/type';
 import { DirectiveLocation } from 'graphql/language';
-import { PlantsModule } from '../plants/plants.module';
+import { PlantModule } from '../modules/plant.module';
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { PlantsModule } from '../plants/plants.module';
         ],
       },
     }),
-    PlantsModule,
+    PlantModule,
   ],
 })
 export class GraphqlModule {}

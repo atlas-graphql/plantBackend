@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { PlantsService } from '../src/plants/plants.service';
+import { PlantService } from '../src/services/plant.service';
 import { AppModule } from '../src/app.module';
 import { v4 } from 'uuid';
-import { Plant } from '../src/plants/entities/plant.entity';
+import { Plant } from '../src/entities/plant.entity';
 
 describe('PlantsResolver (e2e)', () => {
   let app: INestApplication;
-  let plantsService: PlantsService;
+  let plantsService: PlantService;
 
   const createdAt = new Date('2023-01-01');
   const createdAtString = createdAt.toISOString();
@@ -22,7 +22,7 @@ describe('PlantsResolver (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
 
-    plantsService = moduleFixture.get<PlantsService>(PlantsService);
+    plantsService = moduleFixture.get<PlantService>(PlantService);
   });
 
   afterAll(async () => {
