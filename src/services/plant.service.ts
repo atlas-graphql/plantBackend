@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePlantInput } from '../graphql/input/create-plant.input';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { Plant } from '../entities/plant.entity';
 
 @Injectable()
@@ -25,11 +25,9 @@ export class PlantService {
   }
 
   findAllUnboughtPlants(): Promise<number> {
-    return this.plantRepository
-      .find({
-        where: { boughtAt: IsNull() },
-      })
-      .then((plants) => plants.length);
+    return this.plantRepository.count({
+      where: { boughtAt: IsNull(), createdAt: Not(IsNull()) },
+    });
   }
 
   findOneById(id: string): Promise<Plant | null> {
