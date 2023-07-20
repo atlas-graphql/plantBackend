@@ -3,8 +3,8 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+} from 'typeorm'
+import { Field, ID, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
 @Entity({
@@ -13,27 +13,27 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 export class Plant {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)
-  id: string;
+  id: string
 
   @Column()
   @Field(() => String)
-  name: string;
+  name: string
 
   @Column({ nullable: true })
   @Field({ nullable: true })
-  picture?: string;
+  picture?: string
 
   @CreateDateColumn({
     type: 'timestamp with time zone',
   })
   @Field(() => Date)
-  createdAt: Date;
+  createdAt: Date
 
   @Column({ type: 'timestamptz', nullable: true })
   @Field({ nullable: true })
-  boughtAt?: Date;
+  boughtAt?: Date
 
   @Column({ type: 'timestamptz', nullable: true })
   @Field({ nullable: true })
-  deceasedAt?: Date;
+  deceasedAt?: Date
 }
