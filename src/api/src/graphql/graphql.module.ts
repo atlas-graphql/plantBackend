@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common'
-import { GraphQLModule } from '@nestjs/graphql'
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { join } from 'path'
-
-import { GraphQLDirective } from 'graphql/type'
+import { GraphQLDirective, GraphQLSchema } from 'graphql/type'
 import { DirectiveLocation } from 'graphql/language'
 import { upperDirectiveTransformer } from './common/directives/upper-case.directive'
 import { DatasourceModule } from '../entities/datasource/datasource.module'
+import { GraphQLModule } from '@nestjs/graphql'
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 
 @Module({
   imports: [
@@ -14,9 +13,10 @@ import { DatasourceModule } from '../entities/datasource/datasource.module'
     GraphQLModule.forRoot<ApolloDriverConfig>({
       playground: true,
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'schema.gql'),
+      autoSchemaFile: join(process.cwd(), '../../schema.gql'),
       sortSchema: true,
-      transformSchema: schema => upperDirectiveTransformer(schema, 'upper'),
+      transformSchema: (schema: GraphQLSchema) =>
+        upperDirectiveTransformer(schema, 'upper'),
       installSubscriptionHandlers: true,
       buildSchemaOptions: {
         directives: [

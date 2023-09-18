@@ -4,8 +4,5 @@
     "outDir": "./dist",
     "baseUrl": "./",
   },
-  "paths": {
-    "~/src/*": ["src/*"],
-  },
   "include": ["./*.ts", "./**/*.ts", "./**/**/*.ts"],
 }
