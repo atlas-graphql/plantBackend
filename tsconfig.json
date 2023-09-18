@@ -2,14 +2,14 @@
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,
-    "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
+    //"strict": true, look into this
+    "removeComments": true,
+    "target": "ES2022",
     "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
+    "strictPropertyInitialization": false,
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
@@ -18,6 +18,4 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
   },
-  "include": ["src/**/*", "test/**/*"],
-  "exclude": ["demoFiler"]
 }
