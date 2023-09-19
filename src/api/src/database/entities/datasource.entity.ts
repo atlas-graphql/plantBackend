@@ -23,6 +23,16 @@ export class DatasourceEntity {
   })
   type: DatasourceType
 
+  @Column({
+    nullable: true,
+  })
+  apiEndpoint: string
+
+  @Column({
+    nullable: true,
+  })
+  apiToken: string
+
   @CreateDateColumn({
     type: 'timestamp with time zone',
   })
