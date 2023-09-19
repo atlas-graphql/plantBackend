@@ -18,4 +18,10 @@ export class DatasourceService {
     const newDatasource = this.datasourceRepository.create(newDatasourceData)
     return this.datasourceRepository.save(newDatasource)
   }
+
+  find(id: string): Promise<DatasourceEntity | null> {
+    return this.datasourceRepository.findOne({
+      where: { id },
+    })
+  }
 }

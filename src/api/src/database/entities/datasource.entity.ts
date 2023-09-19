@@ -4,6 +4,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
 } from 'typeorm'
+import { DatasourceType } from '../../business-logic/datasource/enums/datasourceType'
 
 @Entity({
   name: 'datasource',
@@ -14,6 +15,13 @@ export class DatasourceEntity {
 
   @Column()
   name: string
+
+  @Column({
+    type: 'enum',
+    enum: DatasourceType,
+    default: null,
+  })
+  type: DatasourceType
 
   @CreateDateColumn({
     type: 'timestamp with time zone',

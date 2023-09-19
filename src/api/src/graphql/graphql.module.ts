@@ -3,7 +3,7 @@ import { join } from 'path'
 import { GraphQLDirective, GraphQLSchema } from 'graphql/type'
 import { DirectiveLocation } from 'graphql/language'
 import { upperDirectiveTransformer } from './common/directives/upper-case.directive'
-import { DatasourceModule } from '../entities/datasource/datasource.module'
+import { DatasourceModule } from '../business-logic/datasource/datasource.module'
 import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 

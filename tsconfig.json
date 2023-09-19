@@ -5,7 +5,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    //"strict": true, look into this
     "removeComments": true,
     "target": "ES2022",
     "sourceMap": true,
